@@ -1442,9 +1442,9 @@
                     
                     // Three sections summary
                     const sections = [
-                        { icon: '📚', title: '分享', desc: '妈妈青春里的好东西' },
-                        { icon: '🌱', title: '成长', desc: '这一路走来的样子' },
-                        { icon: '✨', title: '未来', desc: '想对你说的话' }
+                        { icon: '[ 分享 ]', title: '分享', desc: '妈妈青春里的好东西' },
+                        { icon: '[ 成长 ]', title: '成长', desc: '这一路走来的样子' },
+                        { icon: '[ 未来 ]', title: '未来', desc: '想对你说的话' }
                     ];
                     
                     const startY = 730;
@@ -1457,9 +1457,10 @@
                         ctx.beginPath();
                         ctx.arc(W / 2, y, 30, 0, Math.PI * 2);
                         ctx.fill();
-                        ctx.font = '28px sans-serif';
+                        ctx.fillStyle = '#60a5fa';
+                        ctx.font = '600 18px sans-serif';
                         ctx.textAlign = 'center';
-                        ctx.fillText(sec.icon, W / 2, y + 10);
+                        ctx.fillText(sec.icon, W / 2, y + 6);
                         
                         // Title
                         ctx.fillStyle = '#ffffff';
@@ -1495,7 +1496,7 @@
                     ctx.stroke();
                     
                     // Credit
-                    ctx.fillStyle = '#1e293b';
+                    ctx.fillStyle = '#475569';
                     ctx.font = '400 14px sans-serif';
                     ctx.fillText('SOLO AI · 基于 WorkBuddy 原创内容', W / 2, 1280);
                     
@@ -1549,6 +1550,13 @@
                                 closeBtn.addEventListener('click', () => {
                                     document.body.style.overflow = '';
                                     document.body.removeChild(modal);
+                                });
+                                
+                                modal.addEventListener('click', (e) => {
+                                    if (e.target === modal) {
+                                        document.body.style.overflow = '';
+                                        document.body.removeChild(modal);
+                                    }
                                 });
                             } else {
                                 // Desktop/Mobile: auto download
