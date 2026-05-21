@@ -1360,66 +1360,83 @@
                         downloadBtn.innerHTML = '<span>⏳ 生成中...</span>';
                         downloadBtn.disabled = true;
                         
-                        // Scroll to top for full page capture
-                        window.scrollTo(0, 0);
-                        
                         try {
-                            // Wait for scroll to complete
-                            await new Promise(resolve => setTimeout(resolve, 300));
+                            // Get full page dimensions
+                            const fullWidth = Math.max(
+                                document.body.scrollWidth,
+                                document.documentElement.scrollWidth,
+                                document.body.offsetWidth,
+                                document.documentElement.offsetWidth
+                            );
+                            const fullHeight = Math.max(
+                                document.body.scrollHeight,
+                                document.documentElement.scrollHeight,
+                                document.body.offsetHeight,
+                                document.documentElement.offsetHeight
+                            );
                             
-                            // Use html2canvas to capture full page
-                            const canvas = await html2canvas(document.body, {
-                                scale: 1.5, // Balanced quality and performance
+                            // Use html2canvas with full page capture
+                            const canvas = await html2canvas(document.documentElement, {
+                                scale: 1,
                                 useCORS: true,
                                 allowTaint: true,
-                                backgroundColor: '#0f172a', // Match page background
+                                backgroundColor: '#0f172a',
                                 logging: false,
-                                windowWidth: document.documentElement.scrollWidth,
-                                windowHeight: document.documentElement.scrollHeight,
-                                width: document.documentElement.scrollWidth,
-                                height: document.documentElement.scrollHeight
+                                width: fullWidth,
+                                height: fullHeight,
+                                x: 0,
+                                y: 0,
+                                scrollX: 0,
+                                scrollY: 0,
+                                windowWidth: fullWidth,
+                                windowHeight: fullHeight
                             });
+                            
+                            // Convert to data URL with reduced quality for mobile
+                            const dataUrl = canvas.toDataURL('image/png');
                             
                             // WeChat: show image for long-press save
                             if (isWeChat) {
-                                const dataUrl = canvas.toDataURL('image/png');
-                                
                                 // Create modal for WeChat
                                 const modal = document.createElement('div');
                                 modal.style.cssText = `
                                     position: fixed;
                                     top: 0; left: 0; right: 0; bottom: 0;
-                                    background: rgba(0,0,0,0.9);
+                                    background: rgba(0,0,0,0.95);
                                     display: flex;
                                     flex-direction: column;
                                     align-items: center;
-                                    justify-content: center;
+                                    justify-content: flex-start;
                                     z-index: 10000;
                                     padding: 20px;
+                                    overflow-y: auto;
+                                    -webkit-overflow-scrolling: touch;
                                 `;
                                 
                                 const img = document.createElement('img');
                                 img.src = dataUrl;
                                 img.style.cssText = `
-                                    max-width: 90%;
-                                    max-height: 70vh;
-                                    border-radius: 12px;
-                                    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                                    width: 100%;
+                                    max-width: 400px;
+                                    border-radius: 8px;
+                                    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+                                    margin-bottom: 20px;
                                 `;
                                 
                                 const tip = document.createElement('p');
-                                tip.innerHTML = '👆 长按图片保存到相册';
+                                tip.innerHTML = '👆 长按上方图片保存到相册<br><small>（如图片显示不完整，请尝试手动截图）</small>';
                                 tip.style.cssText = `
                                     color: white;
-                                    margin-top: 20px;
-                                    font-size: 16px;
+                                    margin: 10px 0;
+                                    font-size: 14px;
                                     text-align: center;
+                                    line-height: 1.6;
                                 `;
                                 
                                 const closeBtn = document.createElement('button');
                                 closeBtn.innerHTML = '关闭';
                                 closeBtn.style.cssText = `
-                                    margin-top: 30px;
+                                    margin: 20px 0;
                                     padding: 12px 40px;
                                     background: var(--gold);
                                     color: var(--bg-primary);
@@ -1428,6 +1445,7 @@
                                     font-size: 16px;
                                     font-weight: 600;
                                     cursor: pointer;
+                                    flex-shrink: 0;
                                 `;
                                 
                                 modal.appendChild(img);
@@ -1435,29 +1453,21 @@
                                 modal.appendChild(closeBtn);
                                 document.body.appendChild(modal);
                                 
-                                closeBtn.addEventListener('click', () => {
-                                    document.body.removeChild(modal);
-                                });
+                                // Prevent body scroll when modal is open
+                                document.body.style.overflow = 'hidden';
                                 
-                                modal.addEventListener('click', (e) => {
-                                    if (e.target === modal) {
-                                        document.body.removeChild(modal);
-                                    }
+                                closeBtn.addEventListener('click', () => {
+                                    document.body.style.overflow = '';
+                                    document.body.removeChild(modal);
                                 });
                             } else {
                                 // Desktop/Mobile browsers: auto download
-                                canvas.toBlob(function(blob) {
-                                    if (blob) {
-                                        const url = URL.createObjectURL(blob);
-                                        const link = document.createElement('a');
-                                        link.href = url;
-                                        link.download = '我的16岁.png';
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        document.body.removeChild(link);
-                                        setTimeout(() => URL.revokeObjectURL(url), 100);
-                                    }
-                                }, 'image/png');
+                                const link = document.createElement('a');
+                                link.href = dataUrl;
+                                link.download = '我的16岁.png';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
                             }
                             
                         } catch (err) {
