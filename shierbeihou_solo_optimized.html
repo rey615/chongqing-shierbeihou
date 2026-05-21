@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>重庆购物狂x十二背后 · 官方合作 | 从重庆出发潜入亚洲第一长洞</title>
+<meta name="description" content="600平方公里喀斯特秘境，距重庆仅3.5小时车程。地下裂缝、天坑飞瀑、悬崖咖啡、洞穴蹦极——这不是旅行，是一场入地心的冒险。">
+<meta property="og:title" content="重庆购物狂x十二背后 · 从重庆出发，潜入亚洲第一长洞">
+<meta property="og:description" content="600平方公里喀斯特秘境，距重庆仅3.5小时车程。地下裂缝、天坑飞瀑、悬崖咖啡、洞穴蹦极">
+<meta property="og:image" content="assets/hero_cave.jpg">
+<meta property="og:type" content="website">
+<style>
+/* CSS Variables */
+:root {
+  --primary: #0D4A2E;
+  --primary-light: #1A6B42;
+  --accent: #D4A843;
+  --accent-light: #E8C96A;
+  --dark: #0A0F0D;
+  --text: #F0EDE6;
+  --text-muted: #A0A89E;
+  --card-bg: rgba(255,255,255,0.06);
+  --card-border: rgba(255,255,255,0.1);
+  --glass: rgba(10,15,13,0.85);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+  background: var(--dark); color: var(--text); line-height: 1.7;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
+
+/* Image Loading States */
+.img-wrapper {
+  position: relative; overflow: hidden;
+  background: var(--card-bg);
+}
+.img-wrapper img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity 0.5s ease;
+}
+.img-wrapper img.loaded { opacity: 1; }
+.img-wrapper .img-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 24px;
+}
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 24px;
+  background: rgba(10,15,13,0.6);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+.nav.scrolled { background: var(--glass); padding: 10px 24px; }
+.nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.nav-brand { font-size: 14px; font-weight: 600; color: var(--accent); letter-spacing: 1px; }
+.nav-links { display: flex; gap: 6px; }
+.nav-link {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px;
+  color: var(--text-muted); text-decoration: none;
+  transition: all 0.3s; cursor: pointer; border: none; background: none;
+}
+.nav-link:hover, .nav-link.active { color: var(--text); background: var(--card-bg); }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('assets/hero_cave.jpg') center/cover no-repeat;
+  transform: scale(1.05);
+  will-change: transform;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,15,13,0.5) 0%, rgba(10,15,13,0.3) 40%, rgba(10,15,13,0.8) 100%);
+}
+.hero-content {
+  position: relative; z-index: 2; text-align: center;
+  padding: 120px 24px 80px; max-width: 800px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border-radius: 30px;
+  background: rgba(212,168,67,0.15); border: 1px solid rgba(212,168,67,0.3);
+  color: var(--accent); font-size: 13px; font-weight: 600;
+  margin-bottom: 32px; letter-spacing: 1px;
+  animation: fadeInUp 0.8s ease;
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.hero h1 {
+  font-size: clamp(32px, 6vw, 56px); font-weight: 800; line-height: 1.2;
+  margin-bottom: 24px; animation: fadeInUp 0.8s ease 0.1s both;
+}
+.hero h1 .highlight { color: var(--accent); }
+.hero-desc {
+  font-size: clamp(14px, 2.2vw, 17px); color: var(--text-muted);
+  max-width: 600px; margin: 0 auto 40px; line-height: 1.8;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+  margin-bottom: 40px; animation: fadeInUp 0.8s ease 0.3s both;
+}
+.hero-stat { text-align: center; min-width: 70px; }
+.hero-stat .num { font-size: 26px; font-weight: 800; color: var(--accent); }
+.hero-stat .label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.hero-actions {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+.btn {
+  padding: 14px 28px; border-radius: 30px; font-size: 15px; font-weight: 600;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;
+  touch-action: manipulation;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--dark); box-shadow: 0 4px 20px rgba(212,168,67,0.3);
+}
+.btn-primary:hover, .btn-primary:active { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,168,67,0.4); }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1.5px solid var(--card-border);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== SECTIONS ===== */
+.section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 48px; }
+.section-tag {
+  display: inline-block; padding: 6px 16px; border-radius: 20px;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  font-size: 11px; color: var(--accent); font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+}
+.section-title { font-size: clamp(24px, 4vw, 36px); font-weight: 800; margin-bottom: 12px; }
+.section-desc { color: var(--text-muted); font-size: 15px; max-width: 500px; margin: 0 auto; }
+
+/* ===== CARDS ===== */
+.areas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.area-card {
+  position: relative; border-radius: var(--radius); overflow: hidden;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  transition: all 0.4s ease;
+}
+.area-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: var(--shadow); }
+.area-card-img { height: 180px; position: relative; }
+.area-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.area-card-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(transparent 40%, var(--dark) 100%);
+}
+.area-card-tag {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+}
+.area-card-tag.core { background: var(--accent); color: var(--dark); }
+.area-card-tag.hot { background: #E74C3C; color: white; }
+.area-card-tag.secret { background: #8E44AD; color: white; }
+.area-card-body { padding: 20px; }
+.area-card-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.area-card-body p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.area-tags { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.area-tag { padding: 3px 8px; border-radius: 5px; font-size: 11px; background: rgba(255,255,255,0.05); color: var(--text-muted); }
+
+/* ===== PROJECTS ===== */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.project-card {
+  border-radius: var(--radius); overflow: hidden;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  transition: all 0.4s ease;
+}
+.project-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.project-card-img { height: 160px; position: relative; }
+.project-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.project-card-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(transparent 30%, var(--dark) 100%);
+}
+.project-difficulty { position: absolute; top: 10px; right: 10px; z-index: 2; display: flex; gap: 3px; }
+.project-difficulty .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+.project-difficulty .dot.filled { background: var(--accent); }
+.project-recommend { position: absolute; top: 10px; left: 10px; z-index: 2; padding: 3px 8px; border-radius: 6px; background: var(--accent); color: var(--dark); font-size: 10px; font-weight: 700; }
+.project-card-body { padding: 16px; }
+.project-card-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.project-card-body .desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+.project-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.project-meta span { font-size: 11px; color: var(--text-muted); }
+.project-meta strong { color: var(--text); }
+.project-footer { display: flex; justify-content: space-between; align-items: center; }
+.project-price { font-size: 20px; font-weight: 800; color: var(--accent); }
+.project-price small { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+
+/* ===== BUDGET CALC ===== */
+.calc-container { max-width: 700px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 28px; }
+.calc-sliders { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+.calc-slider label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; }
+.calc-slider label span:last-child { color: var(--accent); font-weight: 700; }
+.calc-slider input[type="range"] {
+  width: 100%; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.1); outline: none;
+  -webkit-appearance: none; appearance: none;
+  cursor: pointer;
+}
+.calc-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; box-shadow: 0 2px 8px rgba(212,168,67,0.4);
+  transition: transform 0.2s;
+}
+.calc-slider input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.calc-slider input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: none;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(212,168,67,0.4);
+}
+.calc-results { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.calc-total {
+  text-align: center; padding: 20px;
+  background: linear-gradient(135deg, rgba(212,168,67,0.1), rgba(212,168,67,0.05));
+  border-radius: var(--radius-sm); border: 1px solid rgba(212,168,67,0.2);
+}
+.calc-total .amount { font-size: 32px; font-weight: 800; color: var(--accent); }
+.calc-total .label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.calc-chart { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; }
+.calc-chart canvas { max-width: 100%; height: auto; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; font-size: 11px; }
+.chart-legend-item { display: flex; align-items: center; gap: 4px; color: var(--text-muted); }
+.chart-legend-color { width: 8px; height: 8px; border-radius: 2px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hero-stats { gap: 16px; }
+  .hero-stat .num { font-size: 22px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .calc-results { grid-template-columns: 1fr; }
+  .areas-grid { grid-template-columns: 1fr; }
+  .section { padding: 60px 16px; }
+  .btn { padding: 12px 20px; font-size: 14px; }
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--glass); color: var(--text); padding: 12px 24px; border-radius: 30px;
+  border: 1px solid var(--card-border); font-size: 14px; z-index: 1000;
+  opacity: 0; transition: all 0.3s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed; bottom: 80px; right: 20px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--glass); border: 1px solid var(--card-border);
+  color: var(--accent); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(20px); pointer-events: none;
+  transition: all 0.3s ease; z-index: 99;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top:hover { background: var(--accent); color: var(--dark); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="返回顶部">↑</button>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand" onclick="scrollToSection('hero'); return false;">重庆购物狂x十二背后</a>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link active" onclick="scrollToSection('hero'); return false;">首页</a>
+      <a href="#areas" class="nav-link" onclick="scrollToSection('areas'); return false;">景区</a>
+      <a href="#projects" class="nav-link" onclick="scrollToSection('projects'); return false;">探洞</a>
+      <a href="#budget" class="nav-link" onclick="scrollToSection('budget'); return false;">费用</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">重庆购物狂x十二背后 · 官方合作</div>
+    <h1>从重庆出发<br><span class="highlight">潜入亚洲第一长洞</span></h1>
+    <p class="hero-desc">600平方公里喀斯特秘境，距重庆仅3.5小时车程。地下裂缝、天坑飞瀑、悬崖咖啡、洞穴蹦极——这不是旅行，是一场入地心的冒险。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">238km</div><div class="label">已探明洞穴长度</div></div>
+      <div class="hero-stat"><div class="num">3.5h</div><div class="label">重庆自驾车程</div></div>
+      <div class="hero-stat"><div class="num">15°C</div><div class="label">洞穴恒温</div></div>
+      <div class="hero-stat"><div class="num">30万+</div><div class="label">负氧离子/cc</div></div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollToSection('projects')">查看探洞项目</button>
+      <button class="btn btn-outline" onclick="scrollToSection('budget')">费用估算</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCENIC AREAS -->
+<section class="section" id="areas">
+  <div class="section-header fade-in">
+    <div class="section-tag">SCENIC AREAS</div>
+    <h2 class="section-title">三大核心景区</h2>
+    <p class="section-desc">双河洞国家地质公园 · 清溪峡景区 · 中国大地缝景区</p>
+  </div>
+  <div class="areas-grid">
+    <div class="area-card fade-in">
+      <div class="area-card-img img-wrapper">
+        <div class="img-placeholder">🏔️</div>
+        <img src="assets/hero_cave.jpg" alt="双河洞" loading="lazy" onload="this.classList.add('loaded')" onerror="this.parentElement.querySelector('.img-placeholder').textContent='❌'">
+        <span class="area-card-tag core">核心</span>
+      </div>
+      <div class="area-card-body">
+        <h3>双河洞国家地质公园</h3>
+        <p>亚洲第一长洞 · 世界最长白云岩洞穴。由107个洞口相连，深度超550米。</p>
+        <div class="area-tags"><span class="area-tag">地下裂缝</span><span class="area-tag">双河谷</span><span class="area-tag">恒温15°C</span></div>
+      </div>
+    </div>
+    <div class="area-card fade-in">
+      <div class="area-card-img img-wrapper">
+        <div class="img-placeholder">🌊</div>
+        <img src="assets/qingxi_river.jpg" alt="清溪峡" loading="lazy" onload="this.classList.add('loaded')" onerror="this.parentElement.querySelector('.img-placeholder').textContent='❌'">
+        <span class="area-card-tag hot">热门</span>
+      </div>
+      <div class="area-card-body">
+        <h3>清溪峡景区</h3>
+        <p>27公里峡谷画廊 · 山地酷玩基地。被誉为"中国风景最美的漂流"。</p>
+        <div class="area-tags"><span class="area-tag">游船</span><span class="area-tag">漂流</span><span class="area-tag">皮划艇</span></div>
+      </div>
+    </div>
+    <div class="area-card fade-in">
+      <div class="area-card-img img-wrapper">
+        <div class="img-placeholder">🏔️</div>
+        <img src="assets/cave_adventure.jpg" alt="大地缝" loading="lazy" onload="this.classList.add('loaded')" onerror="this.parentElement.querySelector('.img-placeholder').textContent='❌'">
+        <span class="area-card-tag secret">秘境</span>
+      </div>
+      <div class="area-card-body">
+        <h3>中国大地缝景区</h3>
+        <p>油桐溪大地缝 · 地质奇观。深不见底的峡谷裂缝，两侧壁立千仞。</p>
+        <div class="area-tags"><span class="area-tag">天坑</span><span class="area-tag">绳降</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects" style="background: linear-gradient(180deg, transparent, rgba(13,74,46,0.05), transparent);">
+  <div class="section-header fade-in">
+    <div class="section-tag">CAVE EXPLORATION</div>
+    <h2 class="section-title">探洞项目</h2>
+    <p class="section-desc">从入门到地狱难度，总有适合你的地下冒险</p>
+  </div>
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<!-- BUDGET -->
+<section class="section" id="budget">
+  <div class="section-header fade-in">
+    <div class="section-tag">BUDGET</div>
+    <h2 class="section-title">费用估算</h2>
+    <p class="section-desc">拖动滑块，算出你的地心探险花销</p>
+  </div>
+  <div class="calc-container fade-in">
+    <div class="calc-sliders">
+      <div class="calc-slider">
+        <label><span>🕳 景区门票</span><span id="vTicket">¥210</span></label>
+        <input type="range" id="sTicket" min="0" max="500" value="210" oninput="updateBudget()" aria-label="景区门票费用" aria-valuemin="0" aria-valuemax="500" aria-valuenow="210" role="slider">
+      </div>
+      <div class="calc-slider">
+        <label><span>🧗 探洞项目</span><span id="vCave">¥250</span></label>
+        <input type="range" id="sCave" min="0" max="2000" value="250" step="10" oninput="updateBudget()" aria-label="探洞项目费用" aria-valuemin="0" aria-valuemax="2000" aria-valuenow="250" role="slider">
+      </div>
+      <div class="calc-slider">
+        <label><span>🏨 住宿（晚）</span><span id="vNights">2晚</span></label>
+        <input type="range" id="sNights" min="1" max="5" value="2" oninput="updateBudget()" aria-label="住宿晚数" aria-valuemin="1" aria-valuemax="5" aria-valuenow="2" role="slider">
+      </div>
+      <div class="calc-slider">
+        <label><span>🏨 每晚均价</span><span id="vHotel">¥600</span></label>
+        <input type="range" id="sHotel" min="100" max="2000" value="600" step="50" oninput="updateBudget()" aria-label="每晚住宿均价" aria-valuemin="100" aria-valuemax="2000" aria-valuenow="600" role="slider">
+      </div>
+      <div class="calc-slider">
+        <label><span>🍜 餐饮（天）</span><span id="vFood">¥120</span></label>
+        <input type="range" id="sFood" min="50" max="300" value="120" step="10" oninput="updateBudget()" aria-label="每日餐饮费用" aria-valuemin="50" aria-valuemax="300" aria-valuenow="120" role="slider">
+      </div>
+      <div class="calc-slider">
+        <label><span>🚗 交通</span><span id="vTransport">¥250</span></label>
+        <input type="range" id="sTransport" min="0" max="800" value="250" step="10" oninput="updateBudget()" aria-label="交通费用" aria-valuemin="0" aria-valuemax="800" aria-valuenow="250" role="slider">
+      </div>
+    </div>
+    <div class="calc-results">
+      <div class="calc-total">
+        <div class="amount" id="totalBudget">¥2,370</div>
+        <div class="label">总预算 · 日均 <span id="dailyBudget">¥790</span></div>
+      </div>
+      <div class="calc-chart">
+        <canvas id="budgetChart" width="150" height="150" style="max-width:150px;" aria-label="预算分布图表"></canvas>
+        <div class="chart-legend" id="chartLegend"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="section" style="text-align:center;padding:40px 20px;border-top:1px solid var(--card-border);">
+  <p style="color:var(--text-muted);font-size:13px;">重庆购物狂x十二背后 · 官方合作专区</p>
+  <p style="color:var(--text-muted);font-size:12px;margin-top:8px;">本页面由 SOLO AI 助手独立设计开发 · 含 AI 生成配图、交互式费用计算器</p>
+</footer>
+
+<script>
+// ===== DATA =====
+const projects = [
+  { name:'银河洞地心环游', diff:2, age:'5~60岁', height:'1.1m+', time:'1.5h', price:268, desc:'轻量级洞穴穿越，适合亲子和初次体验者。', img:'cave_adventure', tags:['亲子友好'] },
+  { name:'银河洞飞拉达', diff:3, age:'12~60岁', height:'1.4m+', time:'2h', price:368, desc:'岩壁探险+绳索攀爬，中等难度。', img:'cave_adventure', tags:['刺激'] },
+  { name:'山王洞溶洞探秘', diff:1, age:'6~65岁', height:'-', time:'2.5h', price:680, desc:'轻体力科普型探洞，适合全家人。', img:'hero_cave', tags:['全家适合'] },
+  { name:'龙塘子天坑绳降', diff:4, age:'12~60岁', height:'1.4m+', time:'3.5h', price:780, desc:'100米天坑绳降+80米横渡溜索。', img:'cave_adventure', tags:['极限'] },
+  { name:'双河谷悬崖咖啡', diff:4, age:'8~60岁', height:'1.2m+', time:'4h', price:380, desc:'徒步+钢索横渡+飞拉达+悬崖咖啡。', img:'hero_cave', tags:['推荐','网红'], recommend:true },
+  { name:'龙塘子原始穿越', diff:5, age:'12~60岁', height:'1.4m+', time:'3.5h', price:1980, desc:'2000米洞穴穿越+绳降+溜索+飞拉达。', img:'cave_adventure', tags:['硬核'], recommend:true },
+];
+
+// ===== RENDER PROJECTS =====
+function renderProjects() {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = projects.map(p => {
+    const dots = Array(5).fill(0).map((_,i) => `<div class="dot${i<p.diff?' filled':''}"></div>`).join('');
+    const rec = p.recommend ? '<span class="project-recommend">推荐</span>' : '';
+    const tags = p.tags.map(t => `<span class="area-tag">${t}</span>`).join('');
+    return `<div class="project-card fade-in">
+      <div class="project-card-img img-wrapper">
+        <div class="img-placeholder">🕳️</div>
+        <img src="assets/${p.img}.jpg" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.parentElement.querySelector('.img-placeholder').textContent='❌'">
+        ${rec}
+        <div class="project-difficulty">${dots}</div>
+      </div>
+      <div class="project-card-body">
+        <h3>${p.name}</h3>
+        <p class="desc">${p.desc}</p>
+        <div class="project-meta">
+          <span>年龄 <strong>${p.age}</strong></span>
+          <span>身高 <strong>${p.height}</strong></span>
+          <span>时长 <strong>${p.time}</strong></span>
+        </div>
+        <div class="area-tags">${tags}</div>
+        <div class="project-footer" style="margin-top:12px;">
+          <div class="project-price">¥${p.price.toLocaleString()}<small>/人</small></div>
+          <button class="btn btn-outline" style="padding:6px 12px;font-size:11px;" onclick="showToast('分享功能开发中')">分享</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== BUDGET CALCULATOR =====
+function updateBudget() {
+  const ticket = parseInt(document.getElementById('sTicket').value);
+  const cave = parseInt(document.getElementById('sCave').value);
+  const nights = parseInt(document.getElementById('sNights').value);
+  const hotel = parseInt(document.getElementById('sHotel').value);
+  const food = parseInt(document.getElementById('sFood').value);
+  const transport = parseInt(document.getElementById('sTransport').value);
+
+  document.getElementById('vTicket').textContent = '¥' + ticket;
+  document.getElementById('vCave').textContent = '¥' + cave;
+  document.getElementById('vNights').textContent = nights + '晚';
+  document.getElementById('vHotel').textContent = '¥' + hotel;
+  document.getElementById('vFood').textContent = '¥' + food;
+  document.getElementById('vTransport').textContent = '¥' + transport;
+
+  const hotelTotal = nights * hotel;
+  const days = nights + 1;
+  const foodTotal = food * days;
+  const total = ticket + cave + hotelTotal + foodTotal + transport;
+  const daily = Math.round(total / days);
+
+  document.getElementById('totalBudget').textContent = '¥' + total.toLocaleString();
+  document.getElementById('dailyBudget').textContent = '¥' + daily.toLocaleString();
+
+  drawBudgetChart([ticket, cave, hotelTotal, foodTotal, transport]);
+}
+
+function drawBudgetChart(data) {
+  const canvas = document.getElementById('budgetChart');
+  if (!canvas) return;
+  
+  // Handle high-DPI displays
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = 150 * dpr;
+  canvas.height = 150 * dpr;
+  
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  
+  const total = data.reduce((a,b) => a+b, 0);
+  const colors = ['#2ECC71','#E74C3C','#9B59B6','#F39C12','#1ABC9C'];
+  const labels = ['门票', '探洞', '住宿', '餐饮', '交通'];
+  const cx = 75, cy = 75, r = 60, inner = 35;
+  
+  ctx.clearRect(0, 0, 150, 150);
+  
+  if (total === 0) {
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.arc(cx, cy, inner, 0, Math.PI * 2, true);
+    ctx.fill();
+    updateChartLegend([], [], []);
+    return;
+  }
+  
+  let start = -Math.PI / 2;
+  const legendData = [];
+  data.forEach((v, i) => {
+    if (v <= 0) return;
+    const angle = (v / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, start, start + angle);
+    ctx.arc(cx, cy, inner, start + angle, start, true);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    legendData.push({ label: labels[i], color: colors[i], value: v });
+    start += angle;
+  });
+  
+  // Center text
+  ctx.fillStyle = '#F0EDE6';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('¥' + (total / 1000).toFixed(1) + 'k', cx, cy - 2);
+  ctx.font = '10px sans-serif';
+  ctx.fillStyle = '#A0A89E';
+  ctx.fillText('总预算', cx, cy + 14);
+  
+  // Update legend
+  updateChartLegend(legendData, colors, labels);
+}
+
+function updateChartLegend(data, colors, labels) {
+  const legendEl = document.getElementById('chartLegend');
+  if (!legendEl) return;
+  
+  if (data.length === 0) {
+    legendEl.innerHTML = '';
+    return;
+  }
+  
+  legendEl.innerHTML = data.map(item => `
+    <div class="chart-legend-item">
+      <span class="chart-legend-color" style="background:${item.color}"></span>
+      <span>${item.label}</span>
+    </div>
+  `).join('');
+}
+
+// ===== UTILS =====
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ===== SCROLL EFFECTS =====
+window.addEventListener('scroll', () => {
+  const scroll = window.scrollY;
+  const bg = document.getElementById('heroBg');
+  if (bg) bg.style.transform = `scale(1.05) translateY(${scroll * 0.3}px)`;
+  
+  const nav = document.getElementById('nav');
+  if (nav) nav.classList.toggle('scrolled', scroll > 100);
+  
+  // Back to top button visibility
+  const backToTop = document.getElementById('backToTop');
+  if (backToTop) backToTop.classList.toggle('visible', scroll > 500);
+}, { passive: true });
+
+// Fade in observer
+function observeFadeIn() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderProjects();
+  observeFadeIn();
+  // Delay budget calc to ensure canvas is ready
+  setTimeout(updateBudget, 100);
+});
+</script>
+</body>
+</html>
