@@ -1289,7 +1289,7 @@
     </footer>
 
     <!-- ========== Background Music ========== -->
-    <audio id="bgm" loop preload="auto">
+    <audio id="bgm" loop preload="auto" autoplay>
         <source src="assets/bgm.mp3" type="audio/mpeg">
     </audio>
 
@@ -1444,31 +1444,25 @@
                 const musicBtn = document.getElementById('musicBtn');
                 if (!bgm || !musicBtn) return;
                 
-                let isPlaying = false;
+                // Default to playing state (matches autoplay attribute)
+                let isPlaying = true;
+                musicBtn.classList.add('playing');
+                musicBtn.title = '暂停音乐';
                 
-                // Try to play on first user interaction
-                function tryPlay() {
-                    if (!isPlaying) {
+                // If autoplay was blocked, retry on first user interaction
+                function ensurePlaying() {
+                    if (bgm.paused) {
                         bgm.play().then(() => {
                             isPlaying = true;
                             musicBtn.classList.add('playing');
+                            musicBtn.classList.remove('paused');
                             musicBtn.title = '暂停音乐';
-                        }).catch(() => {
-                            // Browser blocked autoplay, wait for button click
-                        });
+                        }).catch(() => {});
                     }
                 }
                 
-                // Listen for first user interaction to start music
-                document.addEventListener('click', function onFirstClick() {
-                    tryPlay();
-                    document.removeEventListener('click', onFirstClick);
-                }, { once: true });
-                
-                document.addEventListener('touchstart', function onFirstTouch() {
-                    tryPlay();
-                    document.removeEventListener('touchstart', onFirstTouch);
-                }, { once: true });
+                document.addEventListener('click', ensurePlaying, { once: true });
+                document.addEventListener('touchstart', ensurePlaying, { once: true });
                 
                 // Toggle button
                 musicBtn.addEventListener('click', function(e) {
