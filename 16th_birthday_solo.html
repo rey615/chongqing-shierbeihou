@@ -1194,7 +1194,7 @@
         
         <div class="poster-actions reveal">
             <button class="btn btn-primary" id="downloadPoster">
-                <span>&#128229; 保存海报</span>
+                <span>&#128229; 保存16岁</span>
             </button>
             <button class="btn btn-outline" id="sharePoster">
                 <span>&#128279; 复制链接</span>
@@ -1355,22 +1355,29 @@
                 
                 if (downloadBtn) {
                     downloadBtn.addEventListener('click', async function() {
-                        const posterCard = document.querySelector('.poster-card');
-                        if (!posterCard) return;
-                        
                         // Show loading state
                         const originalText = downloadBtn.innerHTML;
                         downloadBtn.innerHTML = '<span>⏳ 生成中...</span>';
                         downloadBtn.disabled = true;
                         
+                        // Scroll to top for full page capture
+                        window.scrollTo(0, 0);
+                        
                         try {
-                            // Use html2canvas to capture the poster card
-                            const canvas = await html2canvas(posterCard, {
-                                scale: 2, // High resolution
+                            // Wait for scroll to complete
+                            await new Promise(resolve => setTimeout(resolve, 300));
+                            
+                            // Use html2canvas to capture full page
+                            const canvas = await html2canvas(document.body, {
+                                scale: 1.5, // Balanced quality and performance
                                 useCORS: true,
                                 allowTaint: true,
-                                backgroundColor: null,
-                                logging: false
+                                backgroundColor: '#0f172a', // Match page background
+                                logging: false,
+                                windowWidth: document.documentElement.scrollWidth,
+                                windowHeight: document.documentElement.scrollHeight,
+                                width: document.documentElement.scrollWidth,
+                                height: document.documentElement.scrollHeight
                             });
                             
                             // WeChat: show image for long-press save
@@ -1444,7 +1451,7 @@
                                         const url = URL.createObjectURL(blob);
                                         const link = document.createElement('a');
                                         link.href = url;
-                                        link.download = '十六岁生日快乐.png';
+                                        link.download = '我的16岁.png';
                                         document.body.appendChild(link);
                                         link.click();
                                         document.body.removeChild(link);
@@ -1454,8 +1461,8 @@
                             }
                             
                         } catch (err) {
-                            console.error('海报生成失败:', err);
-                            alert('海报生成失败，请尝试截图保存~');
+                            console.error('页面截图失败:', err);
+                            alert('截图生成失败，请尝试手动截图保存~');
                         } finally {
                             // Restore button state
                             downloadBtn.innerHTML = originalText;
