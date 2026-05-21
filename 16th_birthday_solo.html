@@ -1210,9 +1210,6 @@
     <!-- ========== Back to Top ========== -->
     <button class="back-to-top" aria-label="返回顶部" title="返回顶部">&#8593;</button>
 
-    <!-- ========== html2canvas Library ========== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <!-- ========== JavaScript ========== -->
     <script>
         (function () {
@@ -1353,107 +1350,200 @@
                 // Detect WeChat environment
                 const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
                 
-                if (downloadBtn) {
-                    downloadBtn.addEventListener('click', async function() {
-                        // Show loading state
-                        const originalText = downloadBtn.innerHTML;
-                        downloadBtn.innerHTML = '<span>⏳ 生成中...</span>';
-                        downloadBtn.disabled = true;
+                // ---- Canvas Poster Generation ----
+                function generatePoster() {
+                    const W = 750, H = 1334; // iPhone 6/7/8 ratio
+                    const canvas = document.createElement('canvas');
+                    canvas.width = W;
+                    canvas.height = H;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Background gradient
+                    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+                    bgGrad.addColorStop(0, '#0f172a');
+                    bgGrad.addColorStop(0.5, '#1e293b');
+                    bgGrad.addColorStop(1, '#0f172a');
+                    ctx.fillStyle = bgGrad;
+                    ctx.fillRect(0, 0, W, H);
+                    
+                    // Decorative circles
+                    ctx.globalAlpha = 0.06;
+                    ctx.fillStyle = '#3b82f6';
+                    ctx.beginPath();
+                    ctx.arc(W * 0.8, H * 0.15, 200, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#22c55e';
+                    ctx.beginPath();
+                    ctx.arc(W * 0.2, H * 0.85, 180, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    
+                    // Top label
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.font = '600 26px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('HAPPY SWEET 16', W / 2, 120);
+                    
+                    // Decorative line
+                    const lineGrad = ctx.createLinearGradient(W * 0.25, 0, W * 0.75, 0);
+                    lineGrad.addColorStop(0, 'rgba(251,191,36,0)');
+                    lineGrad.addColorStop(0.5, 'rgba(251,191,36,0.6)');
+                    lineGrad.addColorStop(1, 'rgba(251,191,36,0)');
+                    ctx.strokeStyle = lineGrad;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(W * 0.25, 145);
+                    ctx.lineTo(W * 0.75, 145);
+                    ctx.stroke();
+                    
+                    // Main title
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '900 72px sans-serif';
+                    ctx.fillText('十六岁', W / 2, 260);
+                    ctx.font = '700 42px sans-serif';
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.fillText('你好', W / 2, 320);
+                    
+                    // Subtitle
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = '400 24px sans-serif';
+                    ctx.fillText('你来到世界的第十六年', W / 2, 380);
+                    
+                    // Divider
+                    const divGrad = ctx.createLinearGradient(W * 0.3, 0, W * 0.7, 0);
+                    divGrad.addColorStop(0, 'rgba(59,130,246,0)');
+                    divGrad.addColorStop(0.5, 'rgba(59,130,246,0.4)');
+                    divGrad.addColorStop(1, 'rgba(59,130,246,0)');
+                    ctx.strokeStyle = divGrad;
+                    ctx.beginPath();
+                    ctx.moveTo(W * 0.3, 420);
+                    ctx.lineTo(W * 0.7, 420);
+                    ctx.stroke();
+                    
+                    // Quote box
+                    const boxX = 60, boxY = 460, boxW = W - 120, boxH = 200;
+                    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+                    roundRect(ctx, boxX, boxY, boxW, boxH, 16);
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                    ctx.lineWidth = 1;
+                    roundRect(ctx, boxX, boxY, boxW, boxH, 16);
+                    ctx.stroke();
+                    
+                    // Quote text
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.font = '700 28px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('"她希望你快乐"', W / 2, 530);
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '400 22px sans-serif';
+                    ctx.fillText('不是"成功"的那种快乐', W / 2, 575);
+                    ctx.fillText('是"做自己"的那种快乐', W / 2, 610);
+                    
+                    // Three sections summary
+                    const sections = [
+                        { icon: '📚', title: '分享', desc: '妈妈青春里的好东西' },
+                        { icon: '🌱', title: '成长', desc: '这一路走来的样子' },
+                        { icon: '✨', title: '未来', desc: '想对你说的话' }
+                    ];
+                    
+                    const startY = 730;
+                    const gap = 130;
+                    sections.forEach((sec, i) => {
+                        const y = startY + i * gap;
                         
+                        // Icon circle
+                        ctx.fillStyle = 'rgba(59,130,246,0.15)';
+                        ctx.beginPath();
+                        ctx.arc(W / 2, y, 30, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.font = '28px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(sec.icon, W / 2, y + 10);
+                        
+                        // Title
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = '700 26px sans-serif';
+                        ctx.fillText(sec.title, W / 2, y + 55);
+                        
+                        // Desc
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = '400 20px sans-serif';
+                        ctx.fillText(sec.desc, W / 2, y + 85);
+                    });
+                    
+                    // Timeline
+                    ctx.fillStyle = '#475569';
+                    ctx.font = '400 20px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('2010 — 2026 · 十六年', W / 2, 1150);
+                    
+                    // Bottom signature
+                    ctx.fillStyle = '#334155';
+                    ctx.font = '400 16px sans-serif';
+                    ctx.fillText('一位不想当大人的大人', W / 2, 1200);
+                    
+                    // Bottom decorative line
+                    const botGrad = ctx.createLinearGradient(W * 0.3, 0, W * 0.7, 0);
+                    botGrad.addColorStop(0, 'rgba(251,191,36,0)');
+                    botGrad.addColorStop(0.5, 'rgba(251,191,36,0.3)');
+                    botGrad.addColorStop(1, 'rgba(251,191,36,0)');
+                    ctx.strokeStyle = botGrad;
+                    ctx.beginPath();
+                    ctx.moveTo(W * 0.3, 1240);
+                    ctx.lineTo(W * 0.7, 1240);
+                    ctx.stroke();
+                    
+                    // Credit
+                    ctx.fillStyle = '#1e293b';
+                    ctx.font = '400 14px sans-serif';
+                    ctx.fillText('SOLO AI · 基于 WorkBuddy 原创内容', W / 2, 1280);
+                    
+                    return canvas;
+                }
+                
+                function roundRect(ctx, x, y, w, h, r) {
+                    ctx.beginPath();
+                    ctx.moveTo(x + r, y);
+                    ctx.lineTo(x + w - r, y);
+                    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+                    ctx.lineTo(x + w, y + h - r);
+                    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                    ctx.lineTo(x + r, y + h);
+                    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+                    ctx.lineTo(x, y + r);
+                    ctx.quadraticCurveTo(x, y, x + r, y);
+                    ctx.closePath();
+                }
+                
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', function() {
                         try {
-                            // Get full page dimensions
-                            const fullWidth = Math.max(
-                                document.body.scrollWidth,
-                                document.documentElement.scrollWidth,
-                                document.body.offsetWidth,
-                                document.documentElement.offsetWidth
-                            );
-                            const fullHeight = Math.max(
-                                document.body.scrollHeight,
-                                document.documentElement.scrollHeight,
-                                document.body.offsetHeight,
-                                document.documentElement.offsetHeight
-                            );
-                            
-                            // Use html2canvas with full page capture
-                            const canvas = await html2canvas(document.documentElement, {
-                                scale: 1,
-                                useCORS: true,
-                                allowTaint: true,
-                                backgroundColor: '#0f172a',
-                                logging: false,
-                                width: fullWidth,
-                                height: fullHeight,
-                                x: 0,
-                                y: 0,
-                                scrollX: 0,
-                                scrollY: 0,
-                                windowWidth: fullWidth,
-                                windowHeight: fullHeight
-                            });
-                            
-                            // Convert to data URL with reduced quality for mobile
+                            const canvas = generatePoster();
                             const dataUrl = canvas.toDataURL('image/png');
                             
-                            // WeChat: show image for long-press save
                             if (isWeChat) {
-                                // Create modal for WeChat
+                                // WeChat: show image for long-press save
                                 const modal = document.createElement('div');
-                                modal.style.cssText = `
-                                    position: fixed;
-                                    top: 0; left: 0; right: 0; bottom: 0;
-                                    background: rgba(0,0,0,0.95);
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: center;
-                                    justify-content: flex-start;
-                                    z-index: 10000;
-                                    padding: 20px;
-                                    overflow-y: auto;
-                                    -webkit-overflow-scrolling: touch;
-                                `;
+                                modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;padding:20px;';
                                 
                                 const img = document.createElement('img');
                                 img.src = dataUrl;
-                                img.style.cssText = `
-                                    width: 100%;
-                                    max-width: 400px;
-                                    border-radius: 8px;
-                                    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-                                    margin-bottom: 20px;
-                                `;
+                                img.style.cssText = 'width:85%;max-width:400px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
                                 
                                 const tip = document.createElement('p');
-                                tip.innerHTML = '👆 长按上方图片保存到相册<br><small>（如图片显示不完整，请尝试手动截图）</small>';
-                                tip.style.cssText = `
-                                    color: white;
-                                    margin: 10px 0;
-                                    font-size: 14px;
-                                    text-align: center;
-                                    line-height: 1.6;
-                                `;
+                                tip.innerHTML = '👆 长按图片保存到相册';
+                                tip.style.cssText = 'color:white;margin-top:20px;font-size:15px;text-align:center;';
                                 
                                 const closeBtn = document.createElement('button');
                                 closeBtn.innerHTML = '关闭';
-                                closeBtn.style.cssText = `
-                                    margin: 20px 0;
-                                    padding: 12px 40px;
-                                    background: var(--gold);
-                                    color: var(--bg-primary);
-                                    border: none;
-                                    border-radius: 25px;
-                                    font-size: 16px;
-                                    font-weight: 600;
-                                    cursor: pointer;
-                                    flex-shrink: 0;
-                                `;
+                                closeBtn.style.cssText = 'margin-top:25px;padding:10px 36px;background:#fbbf24;color:#0f172a;border:none;border-radius:25px;font-size:15px;font-weight:600;cursor:pointer;';
                                 
                                 modal.appendChild(img);
                                 modal.appendChild(tip);
                                 modal.appendChild(closeBtn);
                                 document.body.appendChild(modal);
                                 
-                                // Prevent body scroll when modal is open
                                 document.body.style.overflow = 'hidden';
                                 
                                 closeBtn.addEventListener('click', () => {
@@ -1461,7 +1551,7 @@
                                     document.body.removeChild(modal);
                                 });
                             } else {
-                                // Desktop/Mobile browsers: auto download
+                                // Desktop/Mobile: auto download
                                 const link = document.createElement('a');
                                 link.href = dataUrl;
                                 link.download = '我的16岁.png';
@@ -1469,14 +1559,9 @@
                                 link.click();
                                 document.body.removeChild(link);
                             }
-                            
                         } catch (err) {
-                            console.error('页面截图失败:', err);
-                            alert('截图生成失败，请尝试手动截图保存~');
-                        } finally {
-                            // Restore button state
-                            downloadBtn.innerHTML = originalText;
-                            downloadBtn.disabled = false;
+                            console.error('海报生成失败:', err);
+                            alert('海报生成失败，请尝试手动截图~');
                         }
                     });
                 }
