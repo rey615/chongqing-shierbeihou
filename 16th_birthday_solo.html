@@ -1350,6 +1350,9 @@
                 const downloadBtn = document.getElementById('downloadPoster');
                 const shareBtn = document.getElementById('sharePoster');
                 
+                // Detect WeChat environment
+                const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+                
                 if (downloadBtn) {
                     downloadBtn.addEventListener('click', async function() {
                         const posterCard = document.querySelector('.poster-card');
@@ -1370,22 +1373,85 @@
                                 logging: false
                             });
                             
-                            // Convert canvas to blob
-                            canvas.toBlob(function(blob) {
-                                if (blob) {
-                                    // Create download link
-                                    const url = URL.createObjectURL(blob);
-                                    const link = document.createElement('a');
-                                    link.href = url;
-                                    link.download = '十六岁生日快乐.png';
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                    
-                                    // Clean up
-                                    setTimeout(() => URL.revokeObjectURL(url), 100);
-                                }
-                            }, 'image/png');
+                            // WeChat: show image for long-press save
+                            if (isWeChat) {
+                                const dataUrl = canvas.toDataURL('image/png');
+                                
+                                // Create modal for WeChat
+                                const modal = document.createElement('div');
+                                modal.style.cssText = `
+                                    position: fixed;
+                                    top: 0; left: 0; right: 0; bottom: 0;
+                                    background: rgba(0,0,0,0.9);
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    justify-content: center;
+                                    z-index: 10000;
+                                    padding: 20px;
+                                `;
+                                
+                                const img = document.createElement('img');
+                                img.src = dataUrl;
+                                img.style.cssText = `
+                                    max-width: 90%;
+                                    max-height: 70vh;
+                                    border-radius: 12px;
+                                    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                                `;
+                                
+                                const tip = document.createElement('p');
+                                tip.innerHTML = '👆 长按图片保存到相册';
+                                tip.style.cssText = `
+                                    color: white;
+                                    margin-top: 20px;
+                                    font-size: 16px;
+                                    text-align: center;
+                                `;
+                                
+                                const closeBtn = document.createElement('button');
+                                closeBtn.innerHTML = '关闭';
+                                closeBtn.style.cssText = `
+                                    margin-top: 30px;
+                                    padding: 12px 40px;
+                                    background: var(--gold);
+                                    color: var(--bg-primary);
+                                    border: none;
+                                    border-radius: 25px;
+                                    font-size: 16px;
+                                    font-weight: 600;
+                                    cursor: pointer;
+                                `;
+                                
+                                modal.appendChild(img);
+                                modal.appendChild(tip);
+                                modal.appendChild(closeBtn);
+                                document.body.appendChild(modal);
+                                
+                                closeBtn.addEventListener('click', () => {
+                                    document.body.removeChild(modal);
+                                });
+                                
+                                modal.addEventListener('click', (e) => {
+                                    if (e.target === modal) {
+                                        document.body.removeChild(modal);
+                                    }
+                                });
+                            } else {
+                                // Desktop/Mobile browsers: auto download
+                                canvas.toBlob(function(blob) {
+                                    if (blob) {
+                                        const url = URL.createObjectURL(blob);
+                                        const link = document.createElement('a');
+                                        link.href = url;
+                                        link.download = '十六岁生日快乐.png';
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                        setTimeout(() => URL.revokeObjectURL(url), 100);
+                                    }
+                                }, 'image/png');
+                            }
                             
                         } catch (err) {
                             console.error('海报生成失败:', err);
