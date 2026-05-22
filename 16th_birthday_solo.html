@@ -1289,7 +1289,7 @@
     </footer>
 
     <!-- ========== Background Music ========== -->
-    <audio id="bgm" loop preload="auto">
+    <audio id="bgm" loop preload="auto" controls style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
         <source src="assets/bgm.mp3" type="audio/mpeg">
     </audio>
 
@@ -1480,6 +1480,8 @@
                 // WeChat: auto-play via WeixinJSBridgeReady
                 function wechatAutoPlay() {
                     if (typeof WeixinJSBridge !== 'undefined') {
+                        // Must load() first for iOS WeChat
+                        bgm.load();
                         WeixinJSBridge.invoke('getNetworkType', {}, function() {
                             playAudio();
                         });
