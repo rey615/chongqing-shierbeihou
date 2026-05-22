@@ -1294,7 +1294,7 @@
     </audio>
 
     <!-- ========== Music Toggle Button ========== -->
-    <button class="music-btn" id="musicBtn" aria-label="播放/暂停音乐" title="播放音乐">
+    <button class="music-btn paused" id="musicBtn" aria-label="播放/暂停音乐">
         <span class="music-icon">&#9835;</span>
         <span class="music-bars">
             <span class="bar"></span>
@@ -1453,11 +1453,11 @@
                     if (playing) {
                         musicBtn.classList.add('playing');
                         musicBtn.classList.remove('paused');
-                        musicBtn.title = '暂停音乐';
+                        musicBtn.setAttribute('title', '暂停音乐');
                     } else {
                         musicBtn.classList.remove('playing');
                         musicBtn.classList.add('paused');
-                        musicBtn.title = '播放音乐';
+                        musicBtn.setAttribute('title', '播放音乐');
                     }
                 }
                 
@@ -1656,7 +1656,7 @@
                     ctx.fillText('2010 — 2026 · 十六年', W / 2, 1150);
                     
                     // Bottom signature
-                    ctx.fillStyle = '#334155';
+                    ctx.fillStyle = '#94a3b8';
                     ctx.font = '400 16px sans-serif';
                     ctx.fillText('一位不想当大人的大人', W / 2, 1200);
                     
