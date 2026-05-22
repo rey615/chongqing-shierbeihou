@@ -1445,61 +1445,71 @@
                 if (!bgm || !musicBtn) return;
                 
                 let isPlaying = false;
+                let hasStarted = false;
                 
-                function startPlay() {
-                    bgm.play().then(() => {
-                        isPlaying = true;
+                // Update button state
+                function updateButton(playing) {
+                    isPlaying = playing;
+                    if (playing) {
                         musicBtn.classList.add('playing');
                         musicBtn.classList.remove('paused');
                         musicBtn.title = '暂停音乐';
-                    }).catch(() => {
-                        // Play failed, keep button in paused state
-                        isPlaying = false;
+                    } else {
                         musicBtn.classList.remove('playing');
                         musicBtn.classList.add('paused');
                         musicBtn.title = '播放音乐';
+                    }
+                }
+                
+                // Play audio
+                function playAudio() {
+                    bgm.play().then(() => {
+                        updateButton(true);
+                        hasStarted = true;
+                    }).catch(() => {
+                        updateButton(false);
                     });
                 }
                 
-                function stopPlay() {
+                // Pause audio
+                function pauseAudio() {
                     bgm.pause();
-                    isPlaying = false;
-                    musicBtn.classList.remove('playing');
-                    musicBtn.classList.add('paused');
-                    musicBtn.title = '播放音乐';
+                    updateButton(false);
                 }
                 
                 // WeChat: auto-play via WeixinJSBridgeReady
-                if (typeof WeixinJSBridge !== 'undefined') {
-                    // WeixinJSBridge already loaded
-                    WeixinJSBridge.invoke('getNetworkType', {}, function() {
-                        startPlay();
-                    });
-                } else {
-                    // Wait for WeixinJSBridge to load
-                    document.addEventListener('WeixinJSBridgeReady', function() {
+                function wechatAutoPlay() {
+                    if (typeof WeixinJSBridge !== 'undefined') {
                         WeixinJSBridge.invoke('getNetworkType', {}, function() {
-                            startPlay();
+                            playAudio();
                         });
-                    }, false);
-                }
-                
-                // Fallback: start on first user interaction for non-WeChat browsers
-                function onFirstInteraction() {
-                    if (!isPlaying) {
-                        startPlay();
                     }
                 }
-                document.addEventListener('click', onFirstInteraction, { once: true });
-                document.addEventListener('touchstart', onFirstInteraction, { once: true });
+                
+                // Check if WeixinJSBridge is ready
+                if (typeof WeixinJSBridge === 'undefined') {
+                    document.addEventListener('WeixinJSBridgeReady', wechatAutoPlay, false);
+                } else {
+                    wechatAutoPlay();
+                }
+                
+                // Non-WeChat: play on first interaction
+                function onFirstInteraction() {
+                    if (!hasStarted) {
+                        playAudio();
+                    }
+                }
+                document.addEventListener('click', onFirstInteraction);
+                document.addEventListener('touchstart', onFirstInteraction);
                 
                 // Toggle button
                 musicBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    e.preventDefault();
                     if (isPlaying) {
-                        stopPlay();
+                        pauseAudio();
                     } else {
-                        startPlay();
+                        playAudio();
                     }
                 });
             }
