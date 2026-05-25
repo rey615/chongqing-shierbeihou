@@ -52,6 +52,7 @@
             line-height: 1.75;
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-anchor: none;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -1311,11 +1312,21 @@
             const backToTop = document.querySelector('.back-to-top');
 
             // ---- Initial scroll to top ----
-            window.scrollTo(0, 0);
-            // Remove hash from URL to prevent auto-scroll to section
-            if (window.location.hash) {
-                history.replaceState(null, '', window.location.pathname + window.location.search);
+            function resetScroll() {
+                window.scrollTo(0, 0);
+                // Remove hash from URL to prevent auto-scroll to section
+                if (window.location.hash) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
             }
+            
+            // Run immediately
+            resetScroll();
+            
+            // Run again after a short delay to ensure it's applied
+            setTimeout(resetScroll, 100);
+            setTimeout(resetScroll, 300);
+            setTimeout(resetScroll, 500);
 
             function onScroll() {
                 const scrollY = window.scrollY;
