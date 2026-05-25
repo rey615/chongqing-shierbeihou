@@ -1310,6 +1310,13 @@
             const navbar = document.querySelector('.navbar');
             const backToTop = document.querySelector('.back-to-top');
 
+            // ---- Initial scroll to top ----
+            window.scrollTo(0, 0);
+            // Remove hash from URL to prevent auto-scroll to section
+            if (window.location.hash) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+
             function onScroll() {
                 const scrollY = window.scrollY;
                 navbar.classList.toggle('scrolled', scrollY > 50);
