@@ -2,7 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="description" content="十六岁生日祝福 - 一个来自妈妈好朋友的特别礼物">
     <meta name="keywords" content="16岁生日, 生日祝福, 成长, 青春">
     <meta name="author" content="SOLO AI">
@@ -1311,22 +1314,33 @@
             const navbar = document.querySelector('.navbar');
             const backToTop = document.querySelector('.back-to-top');
 
-            // ---- Initial scroll to top ----
+            // ---- Initial scroll to top (aggressive) ----
             function resetScroll() {
-                window.scrollTo(0, 0);
-                // Remove hash from URL to prevent auto-scroll to section
+                // Clear any hash from URL
                 if (window.location.hash) {
                     history.replaceState(null, '', window.location.pathname + window.location.search);
                 }
+                // Scroll to top using multiple methods
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                document.body.scrollIntoView({ block: 'start', behavior: 'instant' });
             }
             
             // Run immediately
             resetScroll();
             
-            // Run again after a short delay to ensure it's applied
-            setTimeout(resetScroll, 100);
-            setTimeout(resetScroll, 300);
-            setTimeout(resetScroll, 500);
+            // Run multiple times with increasing delays
+            for (let i = 1; i <= 5; i++) {
+                setTimeout(resetScroll, i * 100);
+            }
+            
+            // Also run on page show (for WeChat back from other pages)
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible') {
+                    resetScroll();
+                }
+            });
 
             function onScroll() {
                 const scrollY = window.scrollY;
