@@ -953,6 +953,17 @@
 </head>
 <body>
 
+    <!-- Preload script to prevent hash scroll -->
+    <script>
+        // Execute BEFORE page renders
+        (function() {
+            if (window.location.hash) {
+                sessionStorage.setItem('initialHash', window.location.hash);
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+        })();
+    </script>
+
     <!-- ========== Navigation ========== -->
     <nav class="navbar" role="navigation" aria-label="主导航">
         <a href="#hero" class="navbar-brand" aria-label="返回顶部">&#10022; 十六岁</a>
@@ -1314,25 +1325,42 @@
             const navbar = document.querySelector('.navbar');
             const backToTop = document.querySelector('.back-to-top');
 
-            // ---- Initial scroll to top (aggressive) ----
+            // ---- Initial scroll to top (most aggressive) ----
             function resetScroll() {
-                // Clear any hash from URL
-                if (window.location.hash) {
-                    history.replaceState(null, '', window.location.pathname + window.location.search);
-                }
-                // Scroll to top using multiple methods
+                // First prevent any default scroll behavior
                 window.scrollTo(0, 0);
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
-                document.body.scrollIntoView({ block: 'start', behavior: 'instant' });
+                document.body.style.scrollBehavior = 'auto';
+                
+                // Clear hash from URL before browser scrolls to it
+                if (window.location.hash) {
+                    const hash = window.location.hash;
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                    // Store hash for later use if needed
+                    sessionStorage.setItem('scrollToSection', hash);
+                }
             }
             
-            // Run immediately
+            // Run immediately BEFORE page renders
             resetScroll();
             
-            // Run multiple times with increasing delays
-            for (let i = 1; i <= 5; i++) {
-                setTimeout(resetScroll, i * 100);
+            // Run multiple times
+            for (let i = 1; i <= 10; i++) {
+                setTimeout(resetScroll, i * 50);
+            }
+            
+            // Also run after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    for (let i = 0; i <= 5; i++) {
+                        setTimeout(resetScroll, i * 100);
+                    }
+                });
+            } else {
+                for (let i = 0; i <= 5; i++) {
+                    setTimeout(resetScroll, i * 100);
+                }
             }
             
             // Also run on page show (for WeChat back from other pages)
